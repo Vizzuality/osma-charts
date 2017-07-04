@@ -1,10 +1,10 @@
 const { ODRI, fetch, process } = window
 
 function mountViz (data) {
-  const from = new Date(2010, 1, 1)
+  const from = new Date(2009, 1, 1)
   const to = new Date()
-  // const to = new Date(2016, 5, 1)
-  ODRI.activity('#activity', { data, range: [from, to] })
+  // const to = new Date(2011, 11, 1)
+  ODRI.activity('#activity', { data, range: [from, to], height: '500px' })
   ODRI.compareMap('#compare-map', {
     width: '100%',
     height: '500px',
@@ -23,7 +23,8 @@ function timeoutPromise (timeout, err, promise) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  const url = `${process.env.SANDBOX_ENDPOINT}/HTI`
+  const url = `./mocks/histogram-features.json`
+  // const url = `${process.env.SANDBOX_ENDPOINT}/HTI`
   timeoutPromise(2000, new Error('Server timed out!'), fetch(url))
     .then(r => r.json())
     .then(mountViz)

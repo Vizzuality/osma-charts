@@ -1,23 +1,29 @@
 @import 'src/variables';
 
 .histogram {
-  display: flex;
-  justify-content: space-between;
+  // display: flex;
+  // justify-content: space-between;
+}
+
+.labels {
+  position: relative;
 }
 
 .histogram-month-label {
   border-top: 5px solid;
   color: $light-grey;
-  margin: .5rem $month-margin;
-  // padding: 1rem 10px;
+  display: inline-block;
+  padding: 1rem 0;
+  position: absolute;
   text-align: center;
-  width: calc(100% - #{2 * $month-margin});
+  top: 5px;
 }
 
 .bars {
   bottom: 0;
   height: 200px;
   position: relative;
+  width: 100%;
 }
 
 .bar {

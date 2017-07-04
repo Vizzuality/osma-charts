@@ -6,7 +6,7 @@ import _mean from 'lodash/mean'
 
 import { mountComponent, chunk, monthLength } from 'utils'
 
-import { FACETS, GRANULARITIES } from 'src/constants'
+import { FACETS, GRANULARITIES, MONTH_NAMES } from 'src/constants'
 
 import Tabs from 'components/tabs'
 import Dropdown from './components/dropdown'
@@ -47,31 +47,19 @@ class DailyActivity extends Component {
     return {
       day,
       month,
-      year,
-      len: monthLength(month, year)
+      year
     }
   }
 
   formatFeatures (data) {
-    const months = 12
     const [from, to] = this.state.range
 
     return data.buildings.recency
       .sort((a, b) => a.day - b.day)
       .filter(d => d.day >= from && d.day < to)
-      .reduce((result, item) => {
-        const { day, month, year, len } = this.parseDate(item.day)
-        result[year] = (!result[year]) ? new Array(months) : result[year]
-        result[year][month] = result[year][month] || new Array(len).fill(0, 0, len)
-
-        result[year][month].forEach((d, i) => {
-          if (i + 1 === day) {
-            result[year][month][i] = item.count_day
-          }
-        })
-
-        return result
-      }, {})
+      .map(({ day, count_day }) => ({
+        day, value: count_day
+      }))
   }
 
   getFeatures () {
@@ -123,6 +111,7 @@ class DailyActivity extends Component {
   render () {
     const { facet, granularity } = this.state
     const data = this.getData()
+
     return (
       <div class={cx(styles.activity)}>
         <div class={appStyles.heading}>
@@ -141,7 +130,7 @@ class DailyActivity extends Component {
             {...{ tabs: FACETS, selected: facet }}
           />
         </div>
-        <Histogram className={styles.histogram} {...{ data, margin: 2 }} />
+        <Histogram className={styles.histogram} {...{ data }} />
       </div>
     )
   }
