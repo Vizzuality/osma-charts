@@ -6,7 +6,7 @@
     "precommit": "lint-staged",
     "build": "NODE_ENV=production && webpack --config ./config/webpack.config-prod",
     "publish": "cp -rf ./public/ ../opendri-charts-gh-pages",
-    "publish-wp": "npm run build && cp ./public/bundle.js ../opendri-website/wp-content/plugins/opendri-charts/scripts",
+    "publish-wp": "npm run build && cp ./public/bundle.js ../opendri-website/wp-content/plugins/osma-charts/scripts",
     "publish-wp:watch": "onchange 'src/**/*.*' -- npm run publish-wp"
   },
   "devDependencies": {
