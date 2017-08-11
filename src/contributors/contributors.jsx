@@ -1,6 +1,7 @@
 import { h, Component } from 'preact'
 import cx from 'classnames'
 import max from 'lodash/max'
+import trunc from 'lodash/truncate'
 
 import { mountComponent, percent } from 'utils'
 import { percentWidth } from 'variables.scss'
@@ -23,12 +24,17 @@ class TopContributors extends Component {
       (allUsers, users) => allUsers.concat(data[users].top_users),
       []
     )
+    const allContributions = users.reduce(
+      (sum, c) => (sum += c.feature_value),
+      0
+    )
     const maxContributions = max(users.map(c => c.feature_value))
 
     const allUsers = users.map(c => ({
       name: c.osm_name,
       contributions: c.feature_value,
-      percent: percent(c.feature_value, maxContributions, 1)
+      percent: percent(c.feature_value, maxContributions, 1),
+      percentContrib: percent(c.feature_value, allContributions, 1)
     }))
 
     return {
@@ -49,8 +55,11 @@ class TopContributors extends Component {
         <ul class={styles['list']}>
           {top.map(c =>
             <li class={styles['list-items']}>
-              <span class={cx(styles['name'], { [styles['local']]: c.local })}>
-                {c.name}
+              <span
+                title={c.name}
+                class={cx(styles['name'], { [styles['local']]: c.local })}
+              >
+                {trunc(c.name, { length: 10 })}
               </span>
               <div class={cx(styles['percent'])}>
                 <div
@@ -60,7 +69,7 @@ class TopContributors extends Component {
                   class={cx(styles['percent-bar'])}
                 />
                 <span class={cx(styles['percent-nr'])}>
-                  {c.percent}%
+                  {c.percentContrib}%
                 </span>
               </div>
             </li>
